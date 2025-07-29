@@ -33,10 +33,10 @@ interface StoreIntegrationRepositoryInterface
      * Get store UUIDs with store id and active environment (integration)
      *
      * @param int $storeId
-     * @param int $integrationId
+     * @param ?int $integrationId
      * @return StoreIntegrationInterface
      */
-    public function getByStoreIdAndIntegrationId(int $storeId, int $integrationId): StoreIntegrationInterface;
+    public function getByStoreIdAndIntegrationId(int $storeId, ?int $integrationId): StoreIntegrationInterface;
 
     /**
      * Get store Extend UUID and store ID by Magento store UUID
