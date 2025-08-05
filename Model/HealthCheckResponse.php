@@ -20,7 +20,7 @@ class HealthCheckResponse implements HealthCheckResponseInterface
     /**
      * @return string|null
      */
-    public function getMessage(): ?string
+    public function getMessage(): string|null
     {
         return $this->message;
     }
