@@ -46,7 +46,7 @@ interface MagicMock
     public function setShippingProtection(array $shippingProtection);
 
     /**
-     * @return mixed
+     * @return ShippingProtection|ShippingProtectionInterface|array|null
      */
     public function getShippingProtection(): ShippingProtection|ShippingProtectionInterface|array|null;
 
