@@ -28,8 +28,8 @@ define([
       }
     } else {
       // otherwise, for simple/standard products, there should just be a single quantity input. use its value.
-      const quantityInput = document.querySelector('.input-text.qty')
-      if (quantityInput) quantity = parseInt(quantityInput.value)
+      const $quantityInput = $('#qty')
+      if ($quantityInput.length) quantity = parseInt($quantityInput.val())
     }
 
     return quantity
