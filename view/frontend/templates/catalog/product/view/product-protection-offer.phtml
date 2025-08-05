@@ -7,26 +7,27 @@
 /** @var $block \Magento\Catalog\Block\Product\View */
 
 $viewModel = $block->getData('viewModel');
-$categoryModel = $block->getData('categoryModel');
-
-$categoryName = '';
-$categories = $block->getProduct()->getCategoryIds();
-
-if (count($categories) > 0) {
-  $categoryName = $categoryModel->getCategoryNameById($categories[0]);
-}
-
-$product = $block->getProduct();
-$productSku = $product->getSku();
-
-/** sanitizing to prevent whitespace and other abnormal characters from being used in a div id */
-$sanitizedProductSku = preg_replace('/[^a-zA-Z0-9-_|]/', '',  $productSku);
-
-$currencyCode = $viewModel->getCurrencyCode();
 $isCurrencySupported = $viewModel->isCurrencySupported();
 $shouldRender = $viewModel->isExtendProductProtectionEnabled() && $viewModel->isProductProtectionProductDisplayPageOfferEnabled() && $isCurrencySupported;
-?>
 
+if ($shouldRender) {
+    $categoryModel = $block->getData('categoryModel');
+    $product = $block->getProduct();
+    $productSku = $product->getSku();
+    $categoryName = '';
+    $categories = $product->getAvailableInCategories();
+
+    if (count($categories) > 0) {
+        $categoryName = $categoryModel->getCategoryNameById($categories[count($categories) - 1]);
+    }
+
+
+    /** sanitizing to prevent whitespace and other abnormal characters from being used in a div id */
+    $sanitizedProductSku = preg_replace('/[^a-zA-Z0-9-_|]/', '',  $productSku);
+    $currencyCode = $viewModel->getCurrencyCode();
+}
+
+?>
 <?php if ($shouldRender) : ?>
   <div class="product-protection-offer" id="product_protection_offer_<?= $sanitizedProductSku ?>"></div>
   <script type="text/x-magento-init">
@@ -34,10 +35,10 @@ $shouldRender = $viewModel->isExtendProductProtectionEnabled() && $viewModel->is
           "#product_protection_offer_<?= $sanitizedProductSku ?>": {
               "productProtectionOffer": [
                   {
-                      "extendStoreUuid": "<?= $block->getData('viewModel')->getExtendStoreUuid() ?>",
-                      "activeEnvironment": "<?= $block->getData('viewModel')->getActiveEnvironment() ?>",
-                      "selectedProductSku": "<?= $block->getProduct()->getSku(); ?>",
-                      "selectedProductPrice": "<?= $block->getProduct()->getPrice(); ?>",
+                      "extendStoreUuid": "<?= $viewModel->getExtendStoreUuid() ?>",
+                      "activeEnvironment": "<?= $viewModel->getActiveEnvironment() ?>",
+                      "selectedProductSku": "<?= $productSku; ?>",
+                      "selectedProductPrice": "<?= $product->getFinalPrice($block->getProductDefaultQty()); ?>",
                       "productCategory": "<?= $categoryName; ?>",
                       "currencyCode": "<?= $currencyCode ?>"
                   }
